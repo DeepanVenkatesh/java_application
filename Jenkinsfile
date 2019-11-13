@@ -8,10 +8,25 @@ pipeline {
         }
         stage('SonarQube analysis') { 
              steps {
-                withSonarQubeEnv('Sonar_Deepan') { 
+                withSonarQubeEnv('sonar') { 
                 sh 'mvn sonar:sonar'
                 }
         }
+        }
+         stage('push to jfrog') { 
+             steps {
+                rtUpload (
+                serverId: 'JFrog_Deepan',
+                spec: '''{
+                    "files": [
+                {
+                "pattern": "target/*.war",
+                "target": "java_deepan/"
+                }
+         ]
+    }''',
+                )
+                }
         }
         }
         
